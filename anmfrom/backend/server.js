@@ -1,0 +1,275 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+
+// Express uygulaması oluştur
+const app = express();
+const PORT = 5000;
+
+// Middleware'ler
+app.use(cors()); // Frontend-backend iletişimi için
+app.use(express.json()); // JSON verilerini işlemek için
+
+// MongoDB bağlantısı
+mongoose
+  .connect("mongodb://localhost:27017/anime-forum", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB bağlantısı başarılı."))
+  .catch((err) => console.log("MongoDB bağlantı hatası:", err));
+
+// Anime Modeli
+const AnimeSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  genre: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Anime = mongoose.model("Anime", AnimeSchema);
+
+// Yorum Modeli
+const CommentSchema = new mongoose.Schema({
+  animeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Anime",
+    required: true,
+  },
+  text: {
+    type: String,
+    required: true,
+  },
+  user: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Comment = mongoose.model("Comment", CommentSchema);
+
+// Anime CRUD API'leri
+
+// 1. Anime Ekleme (Create)
+app.post("/api/anime", async (req, res) => {
+  const { title, description, image, genre } = req.body;
+
+  const anime = new Anime({
+    title,
+    description,
+    image,
+    genre,
+  });
+
+  try {
+    const newAnime = await anime.save();
+    res.status(201).json(newAnime);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// 2. Anime Listeleme (Read)
+app.get("/api/anime", async (req, res) => {
+  try {
+    const animes = await Anime.find();
+    res.json(animes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// 3. Anime Detay Getirme (Read)
+app.get("/api/anime/:id", async (req, res) => {
+  try {
+    const anime = await Anime.findById(req.params.id);
+    res.json(anime);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// 4. Anime Güncelleme (Update)
+app.put("/api/anime/:id", async (req, res) => {
+  const { id } = req.params;
+  const { title, description, image, genre } = req.body;
+
+  try {
+    const updatedAnime = await Anime.findByIdAndUpdate(
+      id,
+      { title, description, image, genre },
+      { new: true }
+    );
+    res.json(updatedAnime);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// 5. Anime Silme (Delete)
+app.delete("/api/anime/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Anime.findByIdAndDelete(id);
+    res.json({ message: "Anime silindi." });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Yorum CRUD API'leri
+
+// 1. Yorum Ekleme (Create)
+app.post("/api/comment", async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, "GIZLI_ANAHTAR");
+
+    const comment = new Comment({
+      ...req.body,
+      user: decoded.id, // Yorumu kullanıcıya bağla
+    });
+    await comment.save();
+    res.status(201).json(comment);
+  } catch (err) {
+    res.status(401).json({ error: "Yetkisiz işlem!" });
+  }
+});
+
+// 2. Yorum Listeleme (Read)
+app.get("/api/comment/:animeId", async (req, res) => {
+  const { animeId } = req.params;
+
+  try {
+    const comments = await Comment.find({ animeId });
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// 3. Yorum Güncelleme (Update)
+app.put("/api/comment/:id", async (req, res) => {
+  const { id } = req.params;
+  const { text } = req.body;
+
+  try {
+    const updatedComment = await Comment.findByIdAndUpdate(
+      id,
+      { text },
+      { new: true }
+    );
+    res.json(updatedComment);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// 4. Yorum Silme (Delete)
+app.delete("/api/comment/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Comment.findByIdAndDelete(id);
+    res.json({ message: "Yorum silindi." });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Server'ı başlat
+app.listen(PORT, () => {
+  console.log(`Server ${PORT} portunda çalışıyor.`);
+});
+
+const User = require("./models/User");
+
+// Kayıt Olma
+app.post("/api/register", async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const user = new User({ username, email, password });
+    await user.save();
+    res.status(201).json({ message: "Kullanıcı oluşturuldu!" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Giriş Yapma
+app.post("/api/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) throw new Error("Kullanıcı bulunamadı!");
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) throw new Error("Şifre yanlış!");
+
+    // JWT Token Oluştur
+    const token = jwt.sign({ id: user._id }, "GIZLI_ANAHTAR", {
+      expiresIn: "1h",
+    });
+    res.json({ token });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// server.js
+const jwt = require("jsonwebtoken");
+
+// Token oluştur
+app.post("/api/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username });
+
+  if (!user || !(await user.comparePassword(password))) {
+    return res.status(401).json({ error: "Kullanıcı adı veya şifre yanlış!" });
+  }
+
+  const token = jwt.sign({ id: user._id }, "GIZLI_ANAHTAR", {
+    expiresIn: "1h",
+  });
+  res.json({ token });
+});
+
+// Token doğrula (Middleware)
+const authMiddleware = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Token bulunamadı!" });
+
+  try {
+    const decoded = jwt.verify(token, "GIZLI_ANAHTAR");
+    req.userId = decoded.id;
+    next();
+  } catch (err) {
+    res.status(401).json({ error: "Geçersiz token!" });
+  }
+};
+
+// Korumalı API
+app.get("/api/protected", authMiddleware, (req, res) => {
+  res.json({ message: "Bu API sadece giriş yapmış kullanıcılar için!" });
+});
