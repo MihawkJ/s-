@@ -1,57 +1,79 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./ModulerRegister.css"; // CSS dosyasını ekledim
+import { Link, useNavigate } from "react-router-dom";
+import styles from "./ModulerRegister.css";
+import axios from "axios";
 
 function RegisterPage() {
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Şifreler eşleşmiyor!");
       return;
     }
-    // Kayıt işlemleri buraya
+    try {
+      await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
+        username,
+        email,
+        password,
+      });
+      alert("Kayıt başarılı! Giriş yapabilirsin.");
+      navigate("/login");
+    } catch (error) {
+      alert("Kayıt başarısız: " + error.response.data.message);
+    }
   };
 
   return (
-    <div className="register-container">
-      <h2>Kayıt Ol</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+    <div className={styles.container}>
+      <h2 className={styles.title}>Kayıt Ol</h2>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Kullanıcı Adı"
+          className={styles.input}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          className={styles.input}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
           placeholder="Şifre"
+          className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <input
           type="password"
           placeholder="Şifreyi Tekrar Girin"
+          className={styles.input}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          required
         />
-        <button type="submit">Kayıt Ol</button>
+        <button type="submit" className={styles.button}>
+          Kayıt Ol
+        </button>
       </form>
-      <p>
-        Zaten hesabın var mı? <Link to="/login">Giriş Yap</Link>
-      </p>
+      <Link to="/login" className={styles.link}>
+        Zaten hesabın var mı? Giriş Yap
+      </Link>
     </div>
   );
 }
 
-export default RegisterPage; // Doğru export
+export default RegisterPage;

@@ -1,39 +1,56 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./ModulerLogin.css"; // CSS dosyasını ekledim
+import { Link, useNavigate } from "react-router-dom";
+import styles from "./ModulerLogin.css"; // CSS Modules
+import axios from "axios";
 
 function LoginPage() {
-  const [username, setUsername] = useState(""); // username state'i eklendi
-  const [password, setPassword] = useState(""); // password state'i eklendi
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Giriş işlemleri buraya
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/login`,
+        { email, password }
+      );
+      localStorage.setItem("token", response.data.token); // JWT token saklama
+      navigate("/profile"); // Başarılıysa yönlendir
+    } catch (error) {
+      alert("Giriş başarısız: " + error.response.data.message);
+    }
   };
 
   return (
-    <div className="login-container">
-      <h2>Giriş Yap</h2>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Giriş Yap</h2>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Kullanıcı Adı"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="Email"
+          className={styles.input}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
           placeholder="Şifre"
+          className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <button type="submit">Giriş Yap</button>
+        <button type="submit" className={styles.button}>
+          Giriş Yap
+        </button>
       </form>
-      <p>
-        Hesabın yok mu? <Link to="/register">Kayıt Ol</Link>
-      </p>
+      <Link to="/register" className={styles.link}>
+        Hesabın yok mu? Kayıt Ol
+      </Link>
     </div>
   );
 }
 
-export default LoginPage; // Doğru export
+export default LoginPage;
