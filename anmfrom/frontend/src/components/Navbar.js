@@ -68,7 +68,7 @@ const Navbar = () => {
           <li className="menu-item">
             <Link to="/register" className="menu-link">
               <FontAwesomeIcon icon={faDoorClosed} />
-              <span>Giriş</span>
+              <span>Kayıt Ol</span>
             </Link>
           </li>
         </ul>

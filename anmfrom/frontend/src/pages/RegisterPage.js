@@ -1,51 +1,57 @@
-// frontend/src/pages/Register.js
 import React, { useState } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
+import "./ModulerRegister.css"; // CSS dosyasını ekledim
 
-const Register = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+function RegisterPage() {
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await axios.post("http://localhost:5000/api/register", formData);
-      alert("Kayıt başarılı! Giriş yapabilirsiniz.");
-    } catch (err) {
-      alert(err.response.data.error);
+    if (password !== confirmPassword) {
+      alert("Şifreler eşleşmiyor!");
+      return;
     }
+    // Kayıt işlemleri buraya
   };
 
   return (
-    <div className="auth-form">
+    <div className="register-container">
       <h2>Kayıt Ol</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Kullanıcı Adı"
-          onChange={(e) =>
-            setFormData({ ...formData, username: e.target.value })
-          }
-        />
-        <input
           type="email"
           placeholder="Email"
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Kullanıcı Adı"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="password"
           placeholder="Şifre"
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Şifreyi Tekrar Girin"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <button type="submit">Kayıt Ol</button>
       </form>
+      <p>
+        Zaten hesabın var mı? <Link to="/login">Giriş Yap</Link>
+      </p>
     </div>
   );
-};
+}
 
-export default Register;
+export default RegisterPage; // Doğru export
