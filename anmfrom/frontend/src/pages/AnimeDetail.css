@@ -1,0 +1,104 @@
+.anime-details-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: white;
+}
+
+/* Anime Bilgileri */
+.anime-info {
+  background: #646464a2;
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.anime-poster {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.genre {
+  color: #ffd700;
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.description {
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+/* Yorumlar Bölümü */
+.comments-section {
+  background: #646464a2;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+.comment-list {
+  margin: 2rem 0;
+}
+
+.comment-card {
+  background: #2a2a2a;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.username {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+/* Yorum Girişi */
+.comment-input textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #2a2a2a;
+  color: white;
+  margin-bottom: 1rem;
+  resize: vertical;
+}
+
+.submit-button {
+  background: #ffd700;
+  color: #000;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.submit-button:hover {
+  background: #e6b800;
+}
+
+.login-warning {
+  text-align: center;
+  color: #ffd700;
+}
+
+.login-warning a {
+  color: #ffd700;
+  text-decoration: underline;
+}
