@@ -2,7 +2,7 @@
   max-width: 400px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #1a1a1a; /* Anime temasına uygun koyu arka plan */
+  background-color: #f1efef; /* Anime temasına uygun koyu arka plan */
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(255, 165, 0, 0.2); /* Turuncu neon efekti */
 }

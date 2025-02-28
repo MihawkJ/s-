@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import "./andet.css";
 
 const AnimeList = () => {
   const [animes, setAnimes] = useState([]);

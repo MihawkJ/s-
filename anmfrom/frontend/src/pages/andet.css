@@ -3,13 +3,13 @@ body {
   margin: 0;
   font-family: "Arial", sans-serif;
   background-color: #ffffff;
-  color: #ece5e5;
+  color: #a3a3a3;
 }
 
 h1,
 h2,
 h3 {
-  color: #2c3e50;
+  color: #000000;
 }
 
 a {
@@ -60,7 +60,7 @@ button:hover {
   background: #fcfcfc;
   border-radius: 10px;
   overflow: hidden; /* Resmin taşmasını engelle */
-  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.459);
 }
 
 .anime-card img {
@@ -68,7 +68,7 @@ button:hover {
   margin-left: 0px;
   height: 500px; /* Resim yüksekliği sabit */
   object-fit: cover; /* Resmi keserek sığdır */
-  border-radius: 10px 10px 0 0;
+  border-radius: 0px 0px 0 0;
 }
 
 .anime-card-content {
@@ -78,7 +78,7 @@ button:hover {
 .anime-card h2 {
   font-size: 1.2rem;
   margin: 10px 0;
-  color: #acacac; /* Altın renk */
+  color: #000000; /* Altın renk */
 }
 
 .anime-card p {
