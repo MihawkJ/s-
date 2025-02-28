@@ -9,8 +9,8 @@ import AnimeDetail from "./pages/AnimeDetail";
 import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
 import "./index.css";
-import LoginPage from "./pages/Login";
-import RegisterPage from "./pages/Register";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -26,8 +26,8 @@ function App() {
             <Route path="/anime/:id" element={<AnimeDetail />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </div>
       </AuthProvider>
