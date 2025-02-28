@@ -2,8 +2,8 @@
 .logo-bar {
   background: linear-gradient(
     101deg,
-    #000000,
-    #000000
+    #1b1b1b,
+    #1b1b1b
   ); /* Lacivert-siyah gradient */
   padding: 15px 20px;
   position: fixed;
@@ -11,7 +11,6 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .logo-container {
@@ -31,7 +30,7 @@
 .toggle-btn {
   background: none;
   border: none;
-  color: white;
+  color: #ff6b6b;
   font-size: 24px;
   cursor: pointer;
 }
@@ -39,7 +38,7 @@
 /* Açılır-Kapanır Sidebar */
 .sidebar {
   margin-top: 10px;
-  background: linear-gradient(180deg, #000000, #000000);
+  background: linear-gradient(180deg, #2a2a2a, #2a2a2a);
   width: 250px;
   height: calc(100vh - 60px);
   position: fixed;
@@ -47,7 +46,6 @@
   left: -250px; /* Kapalıyken gizle */
   transition: left 0.3s ease;
   z-index: 999;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar.open {
@@ -70,7 +68,7 @@
 }
 
 .menu-link {
-  color: white;
+  color: #ff6b6b;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -93,7 +91,7 @@
 .auth-button {
   padding: 10px 20px;
   background-color: #4caf50; /* Anime temasına uygun renk */
-  color: white;
+  color: rgb(255, 255, 255);
   border-radius: 5px;
   text-decoration: none;
   margin: 5px;
