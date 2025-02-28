@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
 
 // Express uygulaması oluştur
 const app = express();
@@ -12,12 +13,20 @@ app.use(express.json()); // JSON verilerini işlemek için
 
 // MongoDB bağlantısı
 mongoose
+
   .connect("mongodb://localhost:27017/anime-forum", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => console.log("MongoDB bağlantısı başarılı."))
   .catch((err) => console.log("MongoDB bağlantı hatası:", err));
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB bağlandı!"))
+  .catch((err) => console.error("MongoDB bağlantı hatası:", err)); // Hata mesajını netleştirdim
 
 // Anime Modeli
 const AnimeSchema = new mongoose.Schema({
@@ -209,11 +218,23 @@ const User = require("./models/User");
 app.post("/api/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    const user = new User({ username, email, password });
+
+    // E-posta ve kullanıcı adı kontrolü
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "Bu e-posta veya kullanıcı adı zaten kayıtlı!" });
+    }
+
+    // Şifreyi hashle
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ username, email, password: hashedPassword });
     await user.save();
-    res.status(201).json({ message: "Kullanıcı oluşturuldu!" });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+
+    res.status(201).json({ message: "Kayıt başarılı!" });
+  } catch (error) {
+    res.status(500).json({ message: error.message }); // Hata mesajını netleştirdim
   }
 });
 

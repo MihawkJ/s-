@@ -13,8 +13,6 @@ function RegisterPage() {
   // RegisterPage.js
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Şifre eşleşme kontrolü
     if (password !== confirmPassword) {
       alert("Şifreler eşleşmiyor!");
       return;
@@ -22,17 +20,18 @@ function RegisterPage() {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/register`,
+        `${process.env.REACT_APP_API_URL}/api/register`, // /api/register ekledim
         { username, email, password }
       );
 
-      if (response.data.message === "Kullanıcı kaydedildi!") {
+      if (response.data.message === "Kayıt başarılı!") {
         alert("Kayıt başarılı! Giriş yapabilirsin.");
         navigate("/login");
       }
     } catch (error) {
-      // Backend'den gelen hatayı göster
-      alert(`Kayıt başarısız: ${error.response.data.message}`);
+      alert(
+        `Kayıt başarısız: ${error.response?.data?.message || error.message}`
+      ); // Hata mesajını netleştirdim
     }
   };
 
