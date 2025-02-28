@@ -57,10 +57,10 @@ button:hover {
 .anime-card {
   text-align: center;
   min-height: 400px; /* Sabit yükseklik */
-  background: #fcfcfc;
+  background: #2a2a2a;
   border-radius: 10px;
   overflow: hidden; /* Resmin taşmasını engelle */
-  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.459);
+  box-shadow: 0 5px 20px rgba(253, 0, 0, 0.459);
 }
 
 .anime-card img {
@@ -77,13 +77,13 @@ button:hover {
 
 .anime-card h2 {
   font-size: 1.2rem;
-  margin: 10px 0;
-  color: #000000; /* Altın renk */
+  margin: 20px 0;
+  color: #ff6b6b; /* Altın renk */
 }
 
 .anime-card p {
   font-size: 0.9rem;
-  color: #000000;
+  color: #ff6b6b;
   line-height: 1.4;
 }
 

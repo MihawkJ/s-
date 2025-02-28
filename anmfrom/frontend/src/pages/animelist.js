@@ -24,7 +24,6 @@ const AnimeList = () => {
                 style={{ width: "100%", maxWidth: "300px" }}
               />
               <h2>{anime.title}</h2>
-              <p>{anime.description}</p>
             </Link>
           </div>
         ))}

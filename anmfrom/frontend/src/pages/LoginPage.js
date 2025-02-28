@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./ModulerLogin.css"; // CSS Modules
+import styles from "./ModulerLogin.module.css"; // CSS Modules
 import axios from "axios";
 
 function LoginPage() {

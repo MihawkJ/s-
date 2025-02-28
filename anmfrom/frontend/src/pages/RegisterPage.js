@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./ModulerRegister.css";
+import styles from "./ModulerRegister.module.css";
 import axios from "axios";
 
 function RegisterPage() {
@@ -10,22 +10,29 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
+  // RegisterPage.js
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Şifre eşleşme kontrolü
     if (password !== confirmPassword) {
       alert("Şifreler eşleşmiyor!");
       return;
     }
+
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
-        username,
-        email,
-        password,
-      });
-      alert("Kayıt başarılı! Giriş yapabilirsin.");
-      navigate("/login");
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/register`,
+        { username, email, password }
+      );
+
+      if (response.data.message === "Kullanıcı kaydedildi!") {
+        alert("Kayıt başarılı! Giriş yapabilirsin.");
+        navigate("/login");
+      }
     } catch (error) {
-      alert("Kayıt başarısız: " + error.response.data.message);
+      // Backend'den gelen hatayı göster
+      alert(`Kayıt başarısız: ${error.response.data.message}`);
     }
   };
 

@@ -3,7 +3,7 @@
   background: linear-gradient(
     101deg,
     #000000,
-    #0c0c0cbe
+    #000000
   ); /* Lacivert-siyah gradient */
   padding: 15px 20px;
   position: fixed;
@@ -23,7 +23,7 @@
 }
 
 .logo-text {
-  color: white;
+  color: #ff6b6b;
   margin: 0;
   font-size: 24px;
 }
