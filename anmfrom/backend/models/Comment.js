@@ -1,23 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const CommentSchema = new mongoose.Schema({
-  animeId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Anime",
-    required: true,
-  },
-  text: {
-    type: String,
-    required: true,
-  },
-  user: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+const commentSchema = new mongoose.Schema({
+  animeId: String,
+  userId: String,
+  text: String,
 });
 
-module.exports = mongoose.model("Comment", CommentSchema);
+const Comment = mongoose.model("Comment", commentSchema);
+export default Comment; // Bu satırı ekle!
