@@ -1,7 +1,7 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const bcrypt = require("bcryptjs");
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import bcrypt from "bcryptjs";
 
 // Express uygulaması oluştur
 const app = express();
@@ -239,22 +239,30 @@ app.post("/api/register", async (req, res) => {
 });
 
 // Giriş Yapma
+// server/index.js
 app.post("/api/login", async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    if (!user) throw new Error("Kullanıcı bulunamadı!");
+    const { email, password } = req.body;
 
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) throw new Error("Şifre yanlış!");
+    // Kullanıcıyı e-posta ile bul
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Geçersiz e-posta veya şifre!" });
+    }
 
-    // JWT Token Oluştur
-    const token = jwt.sign({ id: user._id }, "GIZLI_ANAHTAR", {
+    // Şifreyi karşılaştır
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Geçersiz e-posta veya şifre!" });
+    }
+
+    // JWT token oluştur ve gönder
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.json({ token });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(200).json({ token: token }); // Yanıtı netleştir
+  } catch (error) {
+    res.status(500).json({ message: "Sunucu hatası: " + error.message }); // Hata mesajını detaylandır
   }
 });
 
@@ -319,7 +327,12 @@ app.post("/api/register", async (req, res) => {
 });
 
 const corsOptions = {
-  origin: "http://localhost:3000", // Frontend URL
-  credentials: true,
+  origin: "http://localhost:3000",
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 app.use(cors(corsOptions));
+
+// Backend'de test için:
+const user = await User.findOne({ email: "test@example.com" });
+console.log("Hashlenmiş şifre:", user.password); // Hash'in doğru olduğundan emin olun

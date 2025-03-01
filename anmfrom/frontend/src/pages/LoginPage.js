@@ -12,13 +12,28 @@ function LoginPage() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/login`,
+        `${process.env.REACT_APP_API_URL}/api/login`,
         { email, password }
       );
-      localStorage.setItem("token", response.data.token); // JWT token saklama
-      navigate("/profile"); // Başarılıysa yönlendir
+
+      // Token'ı kontrol et
+      if (!response.data.token) {
+        throw new Error("Token alınamadı!");
+      }
+
+      localStorage.setItem("token", response.data.token);
+      navigate("/profile");
     } catch (error) {
-      alert("Giriş başarısız: " + error.response.data.message);
+      // Hata mesajını detaylandır
+      if (error.response) {
+        alert(
+          `Giriş başarısız: ${
+            error.response.data.message || "Bilinmeyen hata!"
+          }`
+        );
+      } else {
+        alert("Bir hata oluştu: " + error.message);
+      }
     }
   };
 
