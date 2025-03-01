@@ -2,8 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import cors from "cors";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
@@ -67,6 +67,16 @@ app.post("/api/anime/add", async (req, res) => {
     const newAnime = new Anime({ title, description, genre });
     await newAnime.save();
     res.status(201).json(newAnime);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Anime Listeleme
+app.get("/api/anime/list", async (req, res) => {
+  try {
+    const animeList = await Anime.find();
+    res.status(200).json(animeList);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
