@@ -90,7 +90,7 @@ app.get("/api/anime/list", async (req, res) => {
     const animeList = await Anime.find();
     res.status(200).json(animeList);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Anime listesi alınamadı!" });
   }
 });
 
